@@ -35,39 +35,41 @@
 #define ZOOM_IN_TOUCH_SPACING_RATIO     (0.75)
 #define ZOOM_OUT_TOUCH_SPACING_RATIO    (1.5)
 
+@interface MapView (Private)
+- (void)	resetTouches;
+- (CGFloat)	eucledianDistanceFromPoint:(CGPoint)from toPoint:(CGPoint)to;
+- (void)	setPanningModeWithLocation:(CGPoint)location;
+- (void)	setZoomingModeWithSpacing:(CGFloat)spacing;
+- (BOOL)	isPanning;
+- (BOOL)	isZooming;
+@end
+
 @implementation MapView
 
-//-- Unpublished Methods -------------------------------------------------------
-- (void) resetTouches {
-    mLastTouchLocation = CGPointMake(-1, -1);
-    mLastTouchSpacing = -1;
-}
+//-- Public Methods ------------------------------------------------------------
+@synthesize mMapWebView, mLastTouchLocation, mLastTouchSpacing;
 //------------------------------------------------------------------------------
-- (CGFloat) eucledianDistanceFromPoint:(CGPoint)from toPoint:(CGPoint)to {
-    float dX = to.x - from.x;
-    float dY = to.y - from.y;
+- (id) initWithFrame:(CGRect)frame {
+    if (! (self = [super initWithFrame:frame]))
+        return nil;
     
-    return sqrt(dX * dX + dY * dY);
+    self.autoresizesSubviews = YES;
+    self.multipleTouchEnabled = YES;
+    
+    mMapWebView = [[[MapWebView alloc] initWithFrame:self.bounds] autorelease];
+    [self addSubview:mMapWebView];
+    
+    [self resetTouches];
+    
+    return self;
 }
 //------------------------------------------------------------------------------
-- (void) setPanningModeWithLocation:(CGPoint)location {
-    mLastTouchLocation = location;
-    mLastTouchSpacing = -1;
+- (void) dealloc {
+    [mMapWebView release];
+	[super dealloc];
 }
-//------------------------------------------------------------------------------
-- (void) setZoomingModeWithSpacing:(CGFloat)spacing {
-    mLastTouchLocation = CGPointMake(-1, -1);
-    mLastTouchSpacing = spacing;
-}
-//------------------------------------------------------------------------------
-- (BOOL) isPanning {
-    return mLastTouchLocation.x > 0 ? YES : NO;
-}
-//------------------------------------------------------------------------------
-- (BOOL) isZooming {
-    return mLastTouchSpacing > 0 ? YES : NO;
-}
-//------------------------------------------------------------------------------
+
+//-- Touch Events Handling Methods ---------------------------------------------
 - (void) touchesCanceled {
     [self resetTouches];
 }
@@ -155,27 +157,35 @@
     [self resetTouches];
 }
 
-//-- Published Methods ---------------------------------------------------------
-@synthesize mMapWebView, mLastTouchLocation, mLastTouchSpacing;
-//------------------------------------------------------------------------------
-- (id) initWithFrame:(CGRect)frame {
-    if (! (self = [super initWithFrame:frame]))
-        return nil;
-    
-    self.autoresizesSubviews = YES;
-    self.multipleTouchEnabled = YES;
-    
-    mMapWebView = [[[MapWebView alloc] initWithFrame:self.bounds] autorelease];
-    [self addSubview:mMapWebView];
-    
-    [self resetTouches];
-    
-    return self;
+//-- Private Methods -----------------------------------------------------------
+- (void) resetTouches {
+    mLastTouchLocation = CGPointMake(-1, -1);
+    mLastTouchSpacing = -1;
 }
 //------------------------------------------------------------------------------
-- (void) dealloc {
-    [mMapWebView release];
-	[super dealloc];
+- (CGFloat) eucledianDistanceFromPoint:(CGPoint)from toPoint:(CGPoint)to {
+    float dX = to.x - from.x;
+    float dY = to.y - from.y;
+    
+    return sqrt(dX * dX + dY * dY);
+}
+//------------------------------------------------------------------------------
+- (void) setPanningModeWithLocation:(CGPoint)location {
+    mLastTouchLocation = location;
+    mLastTouchSpacing = -1;
+}
+//------------------------------------------------------------------------------
+- (void) setZoomingModeWithSpacing:(CGFloat)spacing {
+    mLastTouchLocation = CGPointMake(-1, -1);
+    mLastTouchSpacing = spacing;
+}
+//------------------------------------------------------------------------------
+- (BOOL) isPanning {
+    return mLastTouchLocation.x > 0 ? YES : NO;
+}
+//------------------------------------------------------------------------------
+- (BOOL) isZooming {
+    return mLastTouchSpacing > 0 ? YES : NO;
 }
 //------------------------------------------------------------------------------
 @end

@@ -33,23 +33,13 @@
 
 #define DEFAULT_ZOOM_LEVEL	15
 
+@interface MapWebView (Private)
+- (void) loadMap;
+@end
+
 @implementation MapWebView
 
-//-- Unpublished Methods -------------------------------------------------------
-- (void) loadMap {
-    int width = (int)[self bounds].size.width;
-    int height = (int)[self bounds].size.height;
-    
-    NSString *urlStr = 
-    	[NSString stringWithFormat:
-         @"http://www.wenear.com/iphone?width=%d&height=%d&zoom=%d", 
-         width, height, DEFAULT_ZOOM_LEVEL];
-    
-    [self loadRequest:[NSURLRequest requestWithURL:
-                       [NSURL URLWithString:urlStr]]];
-}
-
-//-- Published Methods ---------------------------------------------------------
+//-- Public Methods ------------------------------------------------------------
 - (void) didMoveToSuperview {
     // this hook method is used to initialize the view; we don't want 
     // any user input to be delivered to the UIWebView, instead, the 
@@ -122,6 +112,20 @@
      (int)center.x, (int)center.y];
     
     [self evalJS:script];
+}
+
+//-- Private Methods -----------------------------------------------------------
+- (void) loadMap {
+    int width = (int)[self bounds].size.width;
+    int height = (int)[self bounds].size.height;
+    
+    NSString *urlStr = 
+    [NSString stringWithFormat:
+     @"http://www.wenear.com/iphone?width=%d&height=%d&zoom=%d", 
+     width, height, DEFAULT_ZOOM_LEVEL];
+    
+    [self loadRequest:[NSURLRequest requestWithURL:
+                       [NSURL URLWithString:urlStr]]];
 }
 //------------------------------------------------------------------------------
 @end
