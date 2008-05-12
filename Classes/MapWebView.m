@@ -37,9 +37,11 @@
 - (void) loadMap;
 @end
 
+//------------------------------------------------------------------------------
+// MapWebView Implementation
+//------------------------------------------------------------------------------
 @implementation MapWebView
-
-//-- Public Methods ------------------------------------------------------------
+//------------------------------------------------------------------------------
 - (void) didMoveToSuperview {
     // this hook method is used to initialize the view; we don't want 
     // any user input to be delivered to the UIWebView, instead, the 
@@ -113,8 +115,13 @@
     
     [self evalJS:script];
 }
+//------------------------------------------------------------------------------
+@end
 
-//-- Private Methods -----------------------------------------------------------
+//------------------------------------------------------------------------------
+// MapWebView (Private) Implementation
+//------------------------------------------------------------------------------
+@implementation MapWebView (Private)
 - (void) loadMap {
     int width = (int)[self bounds].size.width;
     int height = (int)[self bounds].size.height;
