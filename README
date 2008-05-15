@@ -8,15 +8,15 @@ panning using the touch interface.
 
 Here's a quick description of each included file:
 
-MapView.h/MapView.m			The UIView subclass that encapsulates the 
-							UIWebView running Google Maps. This is the only 
-							class you need to interact with.
+MapView.h/MapView.m         The UIView subclass that encapsulates the 
+                            UIWebView running Google Maps. This is the only 
+                            class you need to interact with.
 
-MapWebView.h/MapWebView.m	A UIWebView used internally to load Google Maps.
-							You don't have to interact with this class yourself.
+MapWebView.h/MapWebView.m   A UIWebView used internally to load Google Maps.
+                            You don't have to interact with this class yourself.
 
-All other files				A sample iPhone application showing how to embed 
-							a MapView in your own applications.
+All other files             A sample iPhone application showing how to embed 
+                            a MapView in your own applications.
 
 The source code is available under the New BSD license.
 
