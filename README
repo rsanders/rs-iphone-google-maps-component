@@ -1,0 +1,23 @@
+The accompanying code comprises a UIView subclass that you can use in your 
+iPhone applications to access all basic features of Google Maps (similar to 
+Android's MapView). It uses a UIWebView in the background to load the 
+HTML/Javascript version of Google Maps, and offers a set of Objective-C 
+methods that mimic a subset of the original Javascript methods for controlling 
+the map. It currently supports setting the center location, and zooming & 
+panning using the touch interface.
+
+Here's a quick description of each included file:
+
+MapView.h/MapView.m			The UIView subclass that encapsulates the 
+							UIWebView running Google Maps. This is the only 
+							class you need to interact with.
+
+MapWebView.h/MapWebView.m	A UIWebView used internally to load Google Maps.
+							You don't have to interact with this class yourself.
+
+All other files				A sample iPhone application showing how to embed 
+							a MapView in your own applications.
+
+The source code is available under the New BSD license.
+
+For bug reports/suggestions, drop me a line at mahmoud.algammal@espace.com.eg
