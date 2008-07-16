@@ -231,8 +231,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -315,6 +313,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -332,18 +332,20 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>26D128F60DDC429900D5AE65</string>
+										<string>268FE8590E2EA1FA00C23F2A</string>
 										<key>history</key>
 										<array>
 											<string>26F9131F0DD3C3AD00714BB1</string>
 											<string>26F9135C0DD3C76100714BB1</string>
 											<string>26FB19110DD6EC9700F671B1</string>
-											<string>264240B30DD8666C00D79126</string>
-											<string>264240B40DD8666C00D79126</string>
-											<string>266C31A30DD899C4008EE4FD</string>
-											<string>266C31B80DD89AFC008EE4FD</string>
-											<string>266C31B90DD89AFC008EE4FD</string>
-											<string>266C31BD0DD89AFC008EE4FD</string>
+											<string>268FE8200E2EA0EA00C23F2A</string>
+											<string>268FE8210E2EA0EA00C23F2A</string>
+											<string>268FE8380E2EA15A00C23F2A</string>
+											<string>268FE8390E2EA15A00C23F2A</string>
+											<string>268FE84C0E2EA1D200C23F2A</string>
+											<string>268FE84D0E2EA1D200C23F2A</string>
+											<string>268FE84F0E2EA1D200C23F2A</string>
+											<string>268FE8510E2EA1D200C23F2A</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -356,6 +358,16 @@
 											<string>2612C96B0DD3AFCD00CA1C72</string>
 											<string>2612C9720DD3AFCD00CA1C72</string>
 											<string>2612C9730DD3AFCD00CA1C72</string>
+											<string>268FE8230E2EA0EA00C23F2A</string>
+											<string>268FE8240E2EA0EA00C23F2A</string>
+											<string>268FE8250E2EA0EA00C23F2A</string>
+											<string>268FE83B0E2EA15A00C23F2A</string>
+											<string>268FE83C0E2EA15A00C23F2A</string>
+											<string>268FE83D0E2EA15A00C23F2A</string>
+											<string>268FE8520E2EA1D200C23F2A</string>
+											<string>268FE8530E2EA1D200C23F2A</string>
+											<string>268FE8540E2EA1D200C23F2A</string>
+											<string>268FE8560E2EA1D200C23F2A</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -413,9 +425,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>26D128F70DDC429900D5AE65</string>
+				<string>268FE8270E2EA0EA00C23F2A</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>26D128F80DDC429900D5AE65</string>
+				<string>268FE8280E2EA0EA00C23F2A</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -549,8 +561,10 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C78EAAD065D492600B07095</string>
 		<string>1CD10A99069EF8BA00B06720</string>
-		<string>/Users/gammal/Documents/MapView/MapView.xcodeproj</string>
+		<string>2612C9830DD3AFCD00CA1C72</string>
+		<string>/Users/gammal/Desktop/iphone-google-maps-component/MapView.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>0 59 1280 719 0 0 1280 778 </string>
@@ -630,7 +644,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>2612C9830DD3AFCD00CA1C72</string>
-				<string>266C31AE0DD89A45008EE4FD</string>
+				<string>268FE83F0E2EA15A00C23F2A</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -750,13 +764,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>26D128F90DDC429900D5AE65</string>
+				<string>268FE8400E2EA15A00C23F2A</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>26D128FA0DDC429900D5AE65</string>
-				<string>26D128FB0DDC429900D5AE65</string>
-				<string>26D128FC0DDC429900D5AE65</string>
-				<string>26D128FD0DDC429900D5AE65</string>
-				<string>26D128FE0DDC429900D5AE65</string>
+				<string>268FE8410E2EA15A00C23F2A</string>
+				<string>268FE8420E2EA15A00C23F2A</string>
+				<string>268FE8430E2EA15A00C23F2A</string>
+				<string>268FE8440E2EA15A00C23F2A</string>
+				<string>268FE8450E2EA15A00C23F2A</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
@@ -918,7 +932,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C78EAAD065D492600B07095</string>
-				<string>266C31C40DD89AFC008EE4FD</string>
+				<string>268FE8460E2EA15A00C23F2A</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>

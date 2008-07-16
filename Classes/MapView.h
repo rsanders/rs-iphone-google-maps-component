@@ -31,15 +31,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class MapWebView;
+#import "MapWebView.h"
 
 @interface MapView : UIView {
-@private
-    MapWebView* mMapWebView;
-    CGPoint mLastTouchLocation;
-    CGFloat mLastTouchSpacing;
+@protected
+    MapWebView *mMapWebView;
+    int         mTouchMovedEventCounter;
+    CGPoint     mLastTouchLocation;
+    CGFloat     mLastTouchSpacing;
 }
-@property (retain) MapWebView* mMapWebView;
-@property CGPoint mLastTouchLocation;
-@property CGFloat mLastTouchSpacing;
+@property (readonly, getter = map) MapWebView* mMapWebView;
 @end

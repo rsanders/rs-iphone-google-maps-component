@@ -32,8 +32,9 @@
 #import "MapView.h"
 #import "MapWebView.h"
 
-#define ZOOM_IN_TOUCH_SPACING_RATIO     (0.75)
-#define ZOOM_OUT_TOUCH_SPACING_RATIO    (1.5)
+#define DROPPED_TOUCH_MOVED_EVENTS_RATIO  (0.8)
+#define ZOOM_IN_TOUCH_SPACING_RATIO       (0.75)
+#define ZOOM_OUT_TOUCH_SPACING_RATIO      (1.5)
 
 @interface MapView (Private)
 - (void)	resetTouches;
@@ -44,12 +45,10 @@
 - (BOOL)	isZooming;
 @end
 
-//------------------------------------------------------------------------------
-// MapView Implementation
-//------------------------------------------------------------------------------
 @implementation MapView
-//------------------------------------------------------------------------------
-@synthesize mMapWebView, mLastTouchLocation, mLastTouchSpacing;
+
+//-- Public Methods ------------------------------------------------------------
+@synthesize mMapWebView;
 //------------------------------------------------------------------------------
 - (id) initWithFrame:(CGRect)frame {
     if (! (self = [super initWithFrame:frame]))
@@ -77,6 +76,8 @@
 }
 //------------------------------------------------------------------------------
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
+    mTouchMovedEventCounter = 0;
+    
     switch ([touches count]) {
         case 1: {
             // potential pan gesture
@@ -101,6 +102,10 @@
 }
 //------------------------------------------------------------------------------
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event {
+    
+    if (++mTouchMovedEventCounter % (int)(1.0 / (1.0 - DROPPED_TOUCH_MOVED_EVENTS_RATIO)))
+        return;
+    
     switch ([touches count]) {
         case 1: {
             // potential pan gesture
@@ -114,7 +119,7 @@
             int dY = (int)(currentLocation.y - mLastTouchLocation.y);
             [self setPanningModeWithLocation:[touch locationInView:self]];
             
-            [mMapWebView moveByDx:dX Dy:dY];
+            [mMapWebView moveByDx:dX dY:dY];
         } break;
             
         case 2: {
@@ -152,20 +157,14 @@
         case 1: {
             UITouch *touch = [[touches allObjects] objectAtIndex:0];
             if (touch.tapCount == 2)
-                [mMapWebView panToCenter:[touch locationInView:self]];
+                [mMapWebView panToCenterWithPixel:[touch locationInView:self]];
         } break;
     }
     
     [self resetTouches];
 }
-//------------------------------------------------------------------------------
-@end
 
-//------------------------------------------------------------------------------
-// MapView (Private) Implementation
-//------------------------------------------------------------------------------
-@implementation MapView (Private)
-//------------------------------------------------------------------------------
+//-- Private Methods -----------------------------------------------------------
 - (void) resetTouches {
     mLastTouchLocation = CGPointMake(-1, -1);
     mLastTouchSpacing = -1;

@@ -31,18 +31,32 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol MapWebViewDelegate
+- (void) mapZoomUpdatedTo:(int)zoomLevel;
+- (void) mapCenterUpdatedToLatLng:(CGPoint)latlng;
+- (void) mapCenterUpdatedToPixel:(CGPoint)pixel;
+@end
+
 @interface MapWebView : UIWebView {
+@private
+    id <MapWebViewDelegate> mDelegate;
 }
-- (void)        didMoveToSuperview;
-- (NSString*)   evalJS:(NSString*)script;
-- (void)        moveByDx:(int)dX Dy:(int)dY;
+@property (retain, getter = delegate) id <MapWebViewDelegate> mDelegate;
+
+- (void)      didMoveToSuperview;
+- (NSString*) evalJS:(NSString*)script;
+- (void)      moveByDx:(int)dX dY:(int)dY;
 
 //-- Methods corresponding to Google Maps Javascript API methods ---------------
-- (int)         getZoom;
-- (void)        setZoom:(int)zoomLevel;
-- (void)        zoomIn;
-- (void)        zoomOut;
-- (CGPoint)     getCenter;
-- (void)        setCenter:(CGPoint)center;
-- (void)        panToCenter:(CGPoint)center;
+- (int)       getZoom;
+- (void)      setZoom:(int)zoomLevel;
+- (void)      zoomIn;
+- (void)      zoomOut;
+- (CGPoint)   getCenterLatLng;
+- (CGPoint)   getCenterPixel;
+- (void)      setCenterWithPixel:(CGPoint)pixel;
+- (void)      setCenterWithLatLng:(CGPoint)latlng;
+- (void)      panToCenterWithPixel:(CGPoint)pixel;
+- (CGPoint)   fromContainerPixelToLatLng:(CGPoint)pixel;
+- (CGPoint)   fromLatLngToContainerPixel:(CGPoint)latlng;
 @end
