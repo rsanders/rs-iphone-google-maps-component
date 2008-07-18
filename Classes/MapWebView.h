@@ -31,10 +31,24 @@
 
 #import <UIKit/UIKit.h>
 
+typedef struct {
+    long x;
+    long y;
+} GPoint;
+
+typedef struct {
+    double lat;
+    double lng;
+} GLatLng;
+
+#define GPointMake(x, y)        (GPoint){(long)(x), (long)(y)}
+#define GLatLngMake(lat, lng)   (GLatLng){(double)(lat), (double)(lng)}
+#define GPoint2CGPoint(p)       CGPointMake((p).x, (p).y)
+
 @protocol MapWebViewDelegate
 - (void) mapZoomUpdatedTo:(int)zoomLevel;
-- (void) mapCenterUpdatedToLatLng:(CGPoint)latlng;
-- (void) mapCenterUpdatedToPixel:(CGPoint)pixel;
+- (void) mapCenterUpdatedToLatLng:(GLatLng)latlng;
+- (void) mapCenterUpdatedToPixel:(GPoint)pixel;
 @end
 
 @interface MapWebView : UIWebView {
@@ -52,11 +66,11 @@
 - (void)      setZoom:(int)zoomLevel;
 - (void)      zoomIn;
 - (void)      zoomOut;
-- (CGPoint)   getCenterLatLng;
-- (CGPoint)   getCenterPixel;
-- (void)      setCenterWithPixel:(CGPoint)pixel;
-- (void)      setCenterWithLatLng:(CGPoint)latlng;
-- (void)      panToCenterWithPixel:(CGPoint)pixel;
-- (CGPoint)   fromContainerPixelToLatLng:(CGPoint)pixel;
-- (CGPoint)   fromLatLngToContainerPixel:(CGPoint)latlng;
+- (GLatLng)   getCenterLatLng;
+- (GPoint)    getCenterPixel;
+- (void)      setCenterWithPixel:(GPoint)pixel;
+- (void)      setCenterWithLatLng:(GLatLng)latlng;
+- (void)      panToCenterWithPixel:(GPoint)pixel;
+- (GLatLng)   fromContainerPixelToLatLng:(GPoint)pixel;
+- (GPoint)    fromLatLngToContainerPixel:(GLatLng)latlng;
 @end

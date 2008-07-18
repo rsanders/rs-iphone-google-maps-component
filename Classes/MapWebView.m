@@ -63,7 +63,7 @@
 - (void) moveByDx:(int)dX dY:(int)dY {
     int centerX = ((int)[self bounds].size.width) >> 1;
     int centerY = ((int)[self bounds].size.height) >> 1;
-    [self setCenterWithPixel:CGPointMake(centerX - dX, centerY - dY)];
+    [self setCenterWithPixel:GPointMake(centerX - dX, centerY - dY)];
 }
 
 //-- Methods corresponding to Google Maps Javascript API methods ---------------
@@ -92,13 +92,13 @@
         [self.delegate mapZoomUpdatedTo:[self getZoom]];
 }
 //------------------------------------------------------------------------------
-- (void) setCenterWithPixel:(CGPoint)pixel {
+- (void) setCenterWithPixel:(GPoint)pixel {
     NSString *script = 
     [NSString stringWithFormat:
-     @"var newCenterPixel = new GPoint(%d, %d);"
+     @"var newCenterPixel = new GPoint(%ld, %ld);"
      "var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
      "map.setCenter(newCenterLatLng);", 
-     (int)pixel.x, (int)pixel.y];
+     pixel.x, pixel.y];
     
     [self evalJS:script];
     
@@ -106,12 +106,12 @@
         [self.delegate mapCenterUpdatedToPixel:pixel];
 }
 //------------------------------------------------------------------------------
-- (void) setCenterWithLatLng:(CGPoint)latlng {
+- (void) setCenterWithLatLng:(GLatLng)latlng {
     NSString *script = 
     [NSString stringWithFormat:
      @"var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
-     "map.setCenter(new GLatLng(%f, %f));", 
-     latlng.y, latlng.x];
+     "map.setCenter(new GLatLng(%lf, %lf));", 
+     latlng.lat, latlng.lng];
     
     [self evalJS:script];
     
@@ -119,35 +119,35 @@
         [self.delegate mapCenterUpdatedToLatLng:latlng];
 }
 //------------------------------------------------------------------------------
-- (CGPoint) getCenterLatLng {
+- (GLatLng) getCenterLatLng {
     // the result should be in the form "(<latitude>, <longitude>)"
     NSString *centerStr = [self evalJS:@"map.getCenter().toString();"];
     
-    float lat, lng;
-    sscanf([centerStr UTF8String], "(%f, %f)", &lat, &lng);
+    GLatLng latlng;
+    sscanf([centerStr UTF8String], "(%lf, %lf)", &latlng.lat, &latlng.lng);
     
-    return CGPointMake(lng, lat);
+    return latlng;
 }
 //------------------------------------------------------------------------------
-- (CGPoint) getCenterPixel {
+- (GPoint) getCenterPixel {
     // the result should be in the form "(<x>, <y>)"
     NSString *centerStr = 
     [self evalJS:@"map.fromLatLngToContainerPixel(map.getCenter()).toString();"];
     
-    int x, y;
-    sscanf([centerStr UTF8String], "(%d, %d)", &x, &y);
+    GPoint pixel;
+    sscanf([centerStr UTF8String], "(%ld, %ld)", &pixel.x, &pixel.y);
     
-    return CGPointMake(x, y);
+    return pixel;
 }
 //------------------------------------------------------------------------------
-- (void) panToCenterWithPixel:(CGPoint)pixel {
+- (void) panToCenterWithPixel:(GPoint)pixel {
     NSString *script = 
     [NSString stringWithFormat:
-     @"var newCenterPixel = new GPoint(%d, %d);"
+     @"var newCenterPixel = new GPoint(%ld, %ld);"
      "var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
      "map.panTo(newCenterLatLng);"
      "map.zoomIn();", 
-     (int)pixel.x, (int)pixel.y];
+     pixel.x, pixel.y];
     
     [self evalJS:script];
     
@@ -157,32 +157,32 @@
     }
 }
 //------------------------------------------------------------------------------
-- (CGPoint) fromContainerPixelToLatLng:(CGPoint)pixel {
+- (GLatLng) fromContainerPixelToLatLng:(GPoint)pixel {
     NSString *script = 
     [NSString stringWithFormat:
-     @"map.fromContainerPixelToLatLng(new GPoint(%d, %d)).toString();", 
-     (int)pixel.x, (int)pixel.y];
+     @"map.fromContainerPixelToLatLng(new GPoint(%ld, %ld)).toString();", 
+     pixel.x, pixel.y];
     
-    NSString *latlng = [self evalJS:script];
+    NSString *latlngStr = [self evalJS:script];
     
-    float lat, lng;
-    sscanf([latlng UTF8String], "(%f, %f)", &lat, &lng);
+    GLatLng latlng;
+    sscanf([latlngStr UTF8String], "(%lf, %lf)", &latlng.lat, &latlng.lng);
     
-    return CGPointMake(lng, lat);
+    return latlng;
 }
 //------------------------------------------------------------------------------
-- (CGPoint) fromLatLngToContainerPixel:(CGPoint)latlng {
+- (GPoint) fromLatLngToContainerPixel:(GLatLng)latlng {
     NSString *script = 
     [NSString stringWithFormat:
-     @"map.fromLatLngToContainerPixel(new GLatLng(%f, %f)).toString();", 
-     latlng.y, latlng.x];
+     @"map.fromLatLngToContainerPixel(new GLatLng(%lf, %lf)).toString();", 
+     latlng.lat, latlng.lng];
     
-    NSString *pixel = [self evalJS:script];
+    NSString *pixelStr = [self evalJS:script];
     
-    int x, y;
-    sscanf([pixel UTF8String], "(%d, %d)", &x, &y);
+    GPoint pixel;
+    sscanf([pixelStr UTF8String], "(%ld, %ld)", &pixel.x, &pixel.y);
     
-    return CGPointMake(x, y);
+    return pixel;
 }
 
 //-- Private Methods -----------------------------------------------------------

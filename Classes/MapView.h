@@ -39,6 +39,8 @@
     int         mTouchMovedEventCounter;
     CGPoint     mLastTouchLocation;
     CGFloat     mLastTouchSpacing;
+    SEL         mOnClickHandler;
 }
 @property (readonly, getter = map) MapWebView* mMapWebView;
+@property (readwrite, getter = onClickHandler, setter = onClickHandler:) SEL mOnClickHandler;
 @end

@@ -49,11 +49,13 @@
 
 //-- Public Methods ------------------------------------------------------------
 @synthesize mMapWebView;
+@synthesize mOnClickHandler;
 //------------------------------------------------------------------------------
 - (id) initWithFrame:(CGRect)frame {
     if (! (self = [super initWithFrame:frame]))
         return nil;
     
+    self.onClickHandler = nil;
     self.autoresizesSubviews = YES;
     self.multipleTouchEnabled = YES;
     
@@ -156,8 +158,17 @@
     switch ([touches count]) {
         case 1: {
             UITouch *touch = [[touches allObjects] objectAtIndex:0];
-            if (touch.tapCount == 2)
-                [mMapWebView panToCenterWithPixel:[touch locationInView:self]];
+            switch (touch.tapCount) {
+                case 1:
+                    if (mOnClickHandler)
+                        [self performSelector:mOnClickHandler];
+                    break;
+                    
+                case 2: {
+                    CGPoint pixel = [touch locationInView:self];
+                    [mMapWebView panToCenterWithPixel:GPointMake(pixel.x, pixel.y)];
+                } break;
+            }
         } break;
     }
     
