@@ -32,6 +32,13 @@
 #import <UIKit/UIKit.h>
 
 typedef struct {
+    double minLat;
+    double minLng;
+    double maxLat;
+    double maxLng;
+} GLatLngBounds;
+
+typedef struct {
     long x;
     long y;
 } GPoint;
@@ -41,6 +48,9 @@ typedef struct {
     double lng;
 } GLatLng;
 
+#define GLatLngBoundsMake(minLat, minLng, maxLat, maxLng) \
+                                (GLatLngBounds){(double)(minLat), (double)(minLng), \
+                                                (double)(maxLat), (double)(maxLng)}
 #define GPointMake(x, y)        (GPoint){(long)(x), (long)(y)}
 #define GLatLngMake(lat, lng)   (GLatLng){(double)(lat), (double)(lng)}
 #define GPoint2CGPoint(p)       CGPointMake((p).x, (p).y)
@@ -73,4 +83,5 @@ typedef struct {
 - (void)      panToCenterWithPixel:(GPoint)pixel;
 - (GLatLng)   fromContainerPixelToLatLng:(GPoint)pixel;
 - (GPoint)    fromLatLngToContainerPixel:(GLatLng)latlng;
+- (int)       getBoundsZoomLevel:(GLatLngBounds)bounds;
 @end

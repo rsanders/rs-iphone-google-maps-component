@@ -163,7 +163,7 @@
                     if (mOnClickHandler)
                         [self performSelector:mOnClickHandler];
                     break;
-                    
+                
                 case 2: {
                     CGPoint pixel = [touch locationInView:self];
                     [mMapWebView panToCenterWithPixel:GPointMake(pixel.x, pixel.y)];

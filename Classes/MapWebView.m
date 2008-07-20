@@ -51,7 +51,7 @@
     self.userInteractionEnabled = NO;
     self.scalesPageToFit = NO;
     self.autoresizingMask = 
-    UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+    	UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     
     [self loadMap];
 }
@@ -94,11 +94,11 @@
 //------------------------------------------------------------------------------
 - (void) setCenterWithPixel:(GPoint)pixel {
     NSString *script = 
-    [NSString stringWithFormat:
-     @"var newCenterPixel = new GPoint(%ld, %ld);"
-     "var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
-     "map.setCenter(newCenterLatLng);", 
-     pixel.x, pixel.y];
+        [NSString stringWithFormat:
+         @"var newCenterPixel = new GPoint(%ld, %ld);"
+          "var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
+          "map.setCenter(newCenterLatLng);", 
+         pixel.x, pixel.y];
     
     [self evalJS:script];
     
@@ -108,10 +108,10 @@
 //------------------------------------------------------------------------------
 - (void) setCenterWithLatLng:(GLatLng)latlng {
     NSString *script = 
-    [NSString stringWithFormat:
-     @"var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
-     "map.setCenter(new GLatLng(%lf, %lf));", 
-     latlng.lat, latlng.lng];
+        [NSString stringWithFormat:
+         @"var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
+          "map.setCenter(new GLatLng(%lf, %lf));", 
+         latlng.lat, latlng.lng];
     
     [self evalJS:script];
     
@@ -132,7 +132,7 @@
 - (GPoint) getCenterPixel {
     // the result should be in the form "(<x>, <y>)"
     NSString *centerStr = 
-    [self evalJS:@"map.fromLatLngToContainerPixel(map.getCenter()).toString();"];
+    	[self evalJS:@"map.fromLatLngToContainerPixel(map.getCenter()).toString();"];
     
     GPoint pixel;
     sscanf([centerStr UTF8String], "(%ld, %ld)", &pixel.x, &pixel.y);
@@ -142,12 +142,12 @@
 //------------------------------------------------------------------------------
 - (void) panToCenterWithPixel:(GPoint)pixel {
     NSString *script = 
-    [NSString stringWithFormat:
-     @"var newCenterPixel = new GPoint(%ld, %ld);"
-     "var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
-     "map.panTo(newCenterLatLng);"
-     "map.zoomIn();", 
-     pixel.x, pixel.y];
+        [NSString stringWithFormat:
+         @"var newCenterPixel = new GPoint(%ld, %ld);"
+          "var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
+          "map.panTo(newCenterLatLng);"
+          "map.zoomIn();", 
+         pixel.x, pixel.y];
     
     [self evalJS:script];
     
@@ -159,9 +159,9 @@
 //------------------------------------------------------------------------------
 - (GLatLng) fromContainerPixelToLatLng:(GPoint)pixel {
     NSString *script = 
-    [NSString stringWithFormat:
-     @"map.fromContainerPixelToLatLng(new GPoint(%ld, %ld)).toString();", 
-     pixel.x, pixel.y];
+    	[NSString stringWithFormat:
+	 	 @"map.fromContainerPixelToLatLng(new GPoint(%ld, %ld)).toString();", 
+     	 pixel.x, pixel.y];
     
     NSString *latlngStr = [self evalJS:script];
     
@@ -173,9 +173,9 @@
 //------------------------------------------------------------------------------
 - (GPoint) fromLatLngToContainerPixel:(GLatLng)latlng {
     NSString *script = 
-    [NSString stringWithFormat:
-     @"map.fromLatLngToContainerPixel(new GLatLng(%lf, %lf)).toString();", 
-     latlng.lat, latlng.lng];
+        [NSString stringWithFormat:
+         @"map.fromLatLngToContainerPixel(new GLatLng(%lf, %lf)).toString();", 
+         latlng.lat, latlng.lng];
     
     NSString *pixelStr = [self evalJS:script];
     
@@ -184,6 +184,22 @@
     
     return pixel;
 }
+//------------------------------------------------------------------------------
+- (int) getBoundsZoomLevel:(GLatLngBounds)bounds {
+    NSString *script;
+    
+    script = 
+        [NSString stringWithFormat:
+         @"map.getBoundsZoomLevel(new GLatLngBounds(new GLatLng(%lf, %lf), new GLatLng(%lf, %lf))).toString();", 
+         bounds.minLat, bounds.minLng, bounds.maxLat, bounds.maxLng];
+    
+    NSString *zoomLevelStr = [self evalJS:script];
+    
+    int zoomLevel;
+    sscanf([zoomLevelStr UTF8String], "%d", &zoomLevel);
+    
+    return zoomLevel;
+}
 
 //-- Private Methods -----------------------------------------------------------
 - (void) loadMap {
@@ -191,9 +207,9 @@
     int height = (int) self.frame.size.height;
     
     NSString *urlStr = 
-    [NSString stringWithFormat:
-     @"http://www.wenear.com/iphone-test?width=%d&height=%d&zoom=%d", 
-     width, height, DEFAULT_ZOOM_LEVEL];
+        [NSString stringWithFormat:
+         @"http://www.wenear.com/iphone-test?width=%d&height=%d&zoom=%d", 
+         width, height, DEFAULT_ZOOM_LEVEL];
     
     [self loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
 }
