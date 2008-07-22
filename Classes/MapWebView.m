@@ -200,6 +200,10 @@
     
     return zoomLevel;
 }
+//------------------------------------------------------------------------------
+- (void) setMapType:(NSString*)mapType {
+    [self evalJS:[NSString stringWithFormat:@"map.setMapType(%@);", mapType]];
+}
 
 //-- Private Methods -----------------------------------------------------------
 - (void) loadMap {

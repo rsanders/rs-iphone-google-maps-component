@@ -55,6 +55,17 @@ typedef struct {
 #define GLatLngMake(lat, lng)   (GLatLng){(double)(lat), (double)(lng)}
 #define GPoint2CGPoint(p)       CGPointMake((p).x, (p).y)
 
+#define G_NORMAL_MAP            @"G_NORMAL_MAP"
+#define G_SATELLITE_MAP         @"G_SATELLITE_MAP"
+#define G_HYBRID_MAP            @"G_HYBRID_MAP"
+#define G_PHYSICAL_MAP          @"G_PHYSICAL_MAP"
+#define G_MOON_ELEVATION_MAP    @"G_MOON_ELEVATION_MAP"
+#define G_MOON_VISIBLE_MAP      @"G_MOON_VISIBLE_MAP"
+#define G_MARS_ELEVATION_MAP    @"G_MARS_ELEVATION_MAP"
+#define G_MARS_VISIBLE_MAP      @"G_MARS_VISIBLE_MAP"
+#define G_MARS_INFRARED_MAP     @"G_MARS_INFRARED_MAP"
+#define G_SKY_VISIBLE_MAP       @"G_SKY_VISIBLE_MAP"
+
 @protocol MapWebViewDelegate
 - (void) mapZoomUpdatedTo:(int)zoomLevel;
 - (void) mapCenterUpdatedToLatLng:(GLatLng)latlng;
@@ -84,4 +95,5 @@ typedef struct {
 - (GLatLng)   fromContainerPixelToLatLng:(GPoint)pixel;
 - (GPoint)    fromLatLngToContainerPixel:(GLatLng)latlng;
 - (int)       getBoundsZoomLevel:(GLatLngBounds)bounds;
+- (void)      setMapType:(NSString*)mapType;
 @end

@@ -80,17 +80,19 @@
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event {
     mTouchMovedEventCounter = 0;
     
-    switch ([touches count]) {
+    NSSet *allTouches = [event allTouches];
+    
+    switch ([allTouches count]) {
         case 1: {
             // potential pan gesture
-            UITouch *touch = [[touches allObjects] objectAtIndex:0];
+            UITouch *touch = [[allTouches allObjects] objectAtIndex:0];
             [self setPanningModeWithLocation:[touch locationInView:self]];
         } break;
             
         case 2: {
             // potential zoom gesture
-            UITouch *touch0 = [[touches allObjects] objectAtIndex:0];
-            UITouch *touch1 = [[touches allObjects] objectAtIndex:1];
+            UITouch *touch0 = [[allTouches allObjects] objectAtIndex:0];
+            UITouch *touch1 = [[allTouches allObjects] objectAtIndex:1];
             CGFloat spacing = 
             [self eucledianDistanceFromPoint:[touch0 locationInView:self] 
                                      toPoint:[touch1 locationInView:self]];
@@ -108,14 +110,16 @@
     if (++mTouchMovedEventCounter % (int)(1.0 / (1.0 - DROPPED_TOUCH_MOVED_EVENTS_RATIO)))
         return;
     
-    switch ([touches count]) {
+    NSSet *allTouches = [event allTouches];
+    
+    switch ([allTouches count]) {
         case 1: {
             // potential pan gesture
             if (! [self isPanning]) {
                 [self resetTouches];
                 break;
             }
-            UITouch *touch = [[touches allObjects] objectAtIndex:0];
+            UITouch *touch = [[allTouches allObjects] objectAtIndex:0];
             CGPoint currentLocation = [touch locationInView:self];
             int dX = (int)(currentLocation.x - mLastTouchLocation.x);
             int dY = (int)(currentLocation.y - mLastTouchLocation.y);
@@ -130,8 +134,8 @@
                 [self resetTouches];
                 break;
             }
-            UITouch *touch0 = [[touches allObjects] objectAtIndex:0];
-            UITouch *touch1 = [[touches allObjects] objectAtIndex:1];
+            UITouch *touch0 = [[allTouches allObjects] objectAtIndex:0];
+            UITouch *touch1 = [[allTouches allObjects] objectAtIndex:1];
             CGFloat spacing = 
             [self eucledianDistanceFromPoint:[touch0 locationInView:self] 
                                      toPoint:[touch1 locationInView:self]];
@@ -155,9 +159,11 @@
 //------------------------------------------------------------------------------
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event {
     
-    switch ([touches count]) {
+    NSSet *allTouches = [event allTouches];
+    
+    switch ([allTouches count]) {
         case 1: {
-            UITouch *touch = [[touches allObjects] objectAtIndex:0];
+            UITouch *touch = [[allTouches allObjects] objectAtIndex:0];
             switch (touch.tapCount) {
                 case 1:
                     if (mOnClickHandler)
