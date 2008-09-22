@@ -31,17 +31,27 @@
 
 #import "MapWebView.h"
 
+
+#import "NibwareLog.h"
+
+
+
 #define DEFAULT_ZOOM_LEVEL	17
 
-@interface MapWebView (Private)
-- (void) loadMap;
-@end
+//@interface MapWebView (Private)
+//// - (void) loadMap;
+//@end
 
 @implementation MapWebView
 
 //-- Public Methods ------------------------------------------------------------
 @synthesize mDelegate;
 //------------------------------------------------------------------------------
+- (void) setInitialLatitude:(double)newLatitude longitude:(double)newLongitude {
+    latitude = newLatitude;
+    longitude = newLongitude;
+}
+
 - (void) didMoveToSuperview {
     // this hook method is used to initialize the view; we don't want 
     // any user input to be delivered to the UIWebView, instead, the 
@@ -52,8 +62,6 @@
     self.scalesPageToFit = NO;
     self.autoresizingMask = 
     	UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    
-    [self loadMap];
 }
 //------------------------------------------------------------------------------
 - (NSString*) evalJS:(NSString*)script {
@@ -74,22 +82,22 @@
 - (void) setZoom:(int)level {
     [self evalJS:[NSString stringWithFormat:@"map.setZoom(%d);", level]];
     
-    if (self.delegate)
-        [self.delegate mapZoomUpdatedTo:level];
+    if (self.mDelegate)
+        [self.mDelegate mapZoomUpdatedTo:level];
 }
 //------------------------------------------------------------------------------
 - (void) zoomIn {
     [self evalJS:@"map.zoomIn();"];
     
-    if (self.delegate)
-        [self.delegate mapZoomUpdatedTo:[self getZoom]];
+    if (self.mDelegate)
+        [self.mDelegate mapZoomUpdatedTo:[self getZoom]];
 }
 //------------------------------------------------------------------------------
 - (void) zoomOut {
     [self evalJS:@"map.zoomOut();"];
     
-    if (self.delegate)
-        [self.delegate mapZoomUpdatedTo:[self getZoom]];
+    if (self.mDelegate)
+        [self.mDelegate mapZoomUpdatedTo:[self getZoom]];
 }
 //------------------------------------------------------------------------------
 - (void) setCenterWithPixel:(GPoint)pixel {
@@ -102,21 +110,21 @@
     
     [self evalJS:script];
     
-    if (self.delegate)
-        [self.delegate mapCenterUpdatedToPixel:pixel];
+    if (self.mDelegate)
+        [self.mDelegate mapCenterUpdatedToPixel:pixel];
 }
 //------------------------------------------------------------------------------
 - (void) setCenterWithLatLng:(GLatLng)latlng {
     NSString *script = 
         [NSString stringWithFormat:
-         @"var newCenterLatLng = map.fromContainerPixelToLatLng(newCenterPixel);"
-          "map.setCenter(new GLatLng(%lf, %lf));", 
+         @"map.setCenter(new GLatLng(%lf, %lf));", 
          latlng.lat, latlng.lng];
-    
-    [self evalJS:script];
-    
-    if (self.delegate)
-        [self.delegate mapCenterUpdatedToLatLng:latlng];
+
+    NSString *res = [self evalJS:script];
+    NSLog(@"setting center with latlng, script = %@, result = %@", script, res);
+
+    if (self.mDelegate)
+        [self.mDelegate mapCenterUpdatedToLatLng:latlng];
 }
 //------------------------------------------------------------------------------
 - (GLatLng) getCenterLatLng {
@@ -151,9 +159,9 @@
     
     [self evalJS:script];
     
-    if (self.delegate) {
-        [self.delegate mapZoomUpdatedTo:[self getZoom]];
-        [self.delegate mapCenterUpdatedToPixel:[self getCenterPixel]];
+    if (self.mDelegate) {
+        [self.mDelegate mapZoomUpdatedTo:[self getZoom]];
+        [self.mDelegate mapCenterUpdatedToPixel:[self getCenterPixel]];
     }
 }
 //------------------------------------------------------------------------------
@@ -205,17 +213,56 @@
     [self evalJS:[NSString stringWithFormat:@"map.setMapType(%@);", mapType]];
 }
 
+#pragma mark Single Marker Functions
+
+- (void) setMarker:(GLatLng)latlng {
+    NSString *script = 
+    [NSString stringWithFormat:
+      @"if (gmarker) { map.removeOverlay(gmarker); gmarker = null; }\n "
+       "gmarker = map.addOverlay(new GMarker(new GLatLng(%lf, %lf)));", 
+        latlng.lat, latlng.lng];
+    
+    NSString *res = [self evalJS:script];
+    NSLog(@"setting marker with latlng, script = %@, result = %@", script, res);
+}
+
+- (void) removeMarker {
+    NSString *script = 
+    [NSString stringWithFormat:
+     @"if (gmarker) { map.removeOverlay(gmarker); gmarker = null; }"
+        ];
+    
+    NSString *res = [self evalJS:script];
+    NSLog(@"removing marker with script %@, res=%@", script, res);
+}
+
+
 //-- Private Methods -----------------------------------------------------------
 - (void) loadMap {
+    NSLog(@"loading map");
     int width = (int) self.frame.size.width;
     int height = (int) self.frame.size.height;
     
-    NSString *urlStr = 
-        [NSString stringWithFormat:
-         @"http://www.wenear.com/iphone-test?width=%d&height=%d&zoom=%d", 
-         width, height, DEFAULT_ZOOM_LEVEL];
+    	NSString *path = [[[NSBundle mainBundle] pathForResource:@"GoogleMapApi" ofType:@"html"]
+                          stringByAppendingFormat:@"?width=%d&height=%d&zoom=%d&latitude=%lf&longitude=%lf", 
+                          width, height, DEFAULT_ZOOM_LEVEL, latitude, longitude];
     
-    [self loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
+    NSLog(@"mapview path = %@", path);
+
+	// Although the docs say that host can be nil, it can't. Opened radar:6234824
+	NSURL *url = [[[NSURL alloc] initWithScheme:NSURLFileScheme host:@"localhost" path:path] autorelease];	
+	NSURLRequest *request = [NSURLRequest requestWithURL:url];
+	[self loadRequest:request];
+
+    // [self loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
 }
 //------------------------------------------------------------------------------
+
+- (void) dealloc {
+    NSLog(@"deallocating mapwebview");
+    [self stopLoading];
+    self.mDelegate = Nil;
+    [super dealloc];
+}
+
 @end

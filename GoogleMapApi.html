@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<title>weNear - Map View</title>
+		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAATejoI1-rG9VOa4T5f3ppWRRYQtG-vnXKOEpkBE1rl0xG1xYLZBTYfFQvZDnVp0yQINRy-HPV5AeNaA" type="text/javascript"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			var map;
+                        var gmarker;
+			
+			function resizeDiv() {
+				var mapEl = document.getElementById("map");
+				mapEl.style.width = (window.innerWidth - 0) + 'px';
+				mapEl.style.height = (window.innerHeight - 0) + 'px';
+			}
+			
+			
+			function load() {
+				var params = {};
+				if (GBrowserIsCompatible()) {
+					var mapEl = document.getElementById("map");
+					try {
+						var paramsArr = String(document.location).split('?')[1].split('&');
+						for (var i = 0; i < paramsArr.length; ++i) {
+							var p = paramsArr[i].split('=');
+							params[p[0]] = p[1];
+						}
+					}
+					catch (e) {}
+					
+					resizeDiv();
+					
+					var lat = (params['latitude'] ? parseFloat(params['latitude']) : 37.4419);
+					var lng = (params['longitude'] ? parseFloat(params['longitude']) : -122.1419);
+					var zoom = (params['zoom'] ? parseInt(params['zoom']) : 13);
+					
+					map = new GMap2(mapEl);
+					map.setCenter(new GLatLng(lat, lng), zoom);
+					
+					try {
+						mapEl.childNodes[1].style.visibility = 'hidden';
+						mapEl.childNodes[2].style.visibility = 'hidden';
+					}
+					catch (e) {}
+				}
+			}
+		//]]>
+		</script>
+  </head>
+
+  <body style="margin: 0px;" onload="load()" onunload="GUnload()" onresize="resizeDiv()">
+    <div id="map" style="border: 0px solid black"/>
+  </body>
+</html>

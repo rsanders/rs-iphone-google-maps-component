@@ -43,4 +43,9 @@
 }
 @property (readonly, getter = map) MapWebView* mMapWebView;
 @property (readwrite, getter = onClickHandler, setter = onClickHandler:) SEL mOnClickHandler;
+
+- (id) initWithFrame:(CGRect)frame latitude:(double)latitude longitude:(double)longitude;
+
+- (void) start;
+
 @end

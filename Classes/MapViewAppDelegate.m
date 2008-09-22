@@ -32,6 +32,11 @@
 #import "MapViewAppDelegate.h"
 #import "MapView.h"
 
+
+#import "NibwareLog.h"
+
+
+
 @implementation MapViewAppDelegate
 
 - (void) applicationDidFinishLaunching:(UIApplication *)application {

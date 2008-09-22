@@ -70,17 +70,23 @@ typedef struct {
 - (void) mapZoomUpdatedTo:(int)zoomLevel;
 - (void) mapCenterUpdatedToLatLng:(GLatLng)latlng;
 - (void) mapCenterUpdatedToPixel:(GPoint)pixel;
+@optional
+- (void) mapLoaded;
 @end
 
 @interface MapWebView : UIWebView {
 @private
     id <MapWebViewDelegate> mDelegate;
+    double  latitude;
+    double  longitude;
 }
-@property (retain, getter = delegate) id <MapWebViewDelegate> mDelegate;
+@property (retain) id <MapWebViewDelegate> mDelegate;
 
 - (void)      didMoveToSuperview;
 - (NSString*) evalJS:(NSString*)script;
 - (void)      moveByDx:(int)dX dY:(int)dY;
+- (void) setInitialLatitude:(double)latitude longitude:(double)longitude;
+- (void)      loadMap;
 
 //-- Methods corresponding to Google Maps Javascript API methods ---------------
 - (int)       getZoom;
@@ -96,4 +102,7 @@ typedef struct {
 - (GPoint)    fromLatLngToContainerPixel:(GLatLng)latlng;
 - (int)       getBoundsZoomLevel:(GLatLngBounds)bounds;
 - (void)      setMapType:(NSString*)mapType;
+
+- (void)      setMarker:(GLatLng)latlng;
+- (void)      removeMarker;
 @end

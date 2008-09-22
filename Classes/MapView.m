@@ -32,6 +32,11 @@
 #import "MapView.h"
 #import "MapWebView.h"
 
+
+#import "NibwareLog.h"
+
+
+
 #define DROPPED_TOUCH_MOVED_EVENTS_RATIO  (0.8)
 #define ZOOM_IN_TOUCH_SPACING_RATIO       (0.75)
 #define ZOOM_OUT_TOUCH_SPACING_RATIO      (1.5)
@@ -51,7 +56,7 @@
 @synthesize mMapWebView;
 @synthesize mOnClickHandler;
 //------------------------------------------------------------------------------
-- (id) initWithFrame:(CGRect)frame {
+- (id) initWithFrame:(CGRect)frame latitude:(double)latitude longitude:(double)longitude {
     if (! (self = [super initWithFrame:frame]))
         return nil;
     
@@ -59,16 +64,24 @@
     self.autoresizesSubviews = YES;
     self.multipleTouchEnabled = YES;
     
-    mMapWebView = [[[MapWebView alloc] initWithFrame:self.bounds] autorelease];
+    mMapWebView = [[MapWebView alloc] initWithFrame:frame];
+    [mMapWebView setInitialLatitude:latitude longitude:longitude];
     [self addSubview:mMapWebView];
-    
+
     [self resetTouches];
     
     return self;
 }
+
+- (void) start {
+    [mMapWebView loadMap];
+}
+
 //------------------------------------------------------------------------------
 - (void) dealloc {
+    [mMapWebView removeFromSuperview];
     [mMapWebView release];
+    mMapWebView = Nil;
 	[super dealloc];
 }
 
